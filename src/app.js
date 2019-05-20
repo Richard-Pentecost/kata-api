@@ -23,6 +23,7 @@ const {
 } = require('./lib/numbers');
 
 const app = express();
+app.use(express.json());
 
 app.get('/strings/hello/:string', (req, res) => {
   res.status(200).json({ result: sayHello(req.params.string) });
@@ -48,19 +49,49 @@ app.get('/strings/first-characters/:string', (req, res) => {
   }
 });
 
+// const isNumeric1 = (string) => {
+//   return /^\d+$/.test(string);
+// };
+
+const isNumeric = (string) => {
+  return !Number.isNaN(parseInt(string));
+};
+
 app.get('/numbers/add/:a/and/:b', (req, res) => {
-  if ((parseInt(req.params.a) || req.params.a === '0') && (parseInt(req.params.b) || req.params.b === '0')) {
-    res.status(200).json({ result: add(parseInt(req.params.a), parseInt(req.params.b)) });
+  if (isNumeric(req.params.a) && isNumeric(req.params.b)) {
+    const a = parseInt(req.params.a);
+    const b = parseInt(req.params.b);
+    res.status(200).json({ result: add(a, b) });
   } else {
     res.status(400).json({ error: 'Parameters must be valid numbers.' });
   }
 });
 
 app.get('/numbers/subtract/:a/from/:b', (req, res) => {
-  if ((parseInt(req.params.a) || req.params.a === '0') && (parseInt(req.params.b) || req.params.b === '0')) {
-    res.status(200).json({ result: subtract(parseInt(req.params.b), parseInt(req.params.a)) });
+  if (isNumeric(req.params.a) && isNumeric(req.params.b)) {
+    const a = parseInt(req.params.a);
+    const b = parseInt(req.params.b);
+    res.status(200).json({ result: subtract(b, a) });
   } else {
     res.status(400).json({ error: 'Parameters must be valid numbers.' });
+  }
+});
+
+app.post('/numbers/multiply', (req, res) => {
+  const a = req.body.a;
+  const b = req.body.b;
+  const answer = multiply(a, b);
+
+  if (answer) {
+    res.status(200).json({ result: answer });
+  } else {
+    let message;
+    if (!a || !b) {
+      message = 'Parameters "a" and "b" are required.';
+    } else {
+      message = 'Parameters "a" and "b" must be valid numbers.';
+    };
+    res.status(400).json({ error: message });
   }
 });
 
