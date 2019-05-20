@@ -48,4 +48,14 @@ app.get('/strings/first-characters/:string', (req, res) => {
   }
 });
 
+app.get('/numbers/add/:a/and/:b', (req, res) => {
+  if ((parseInt(req.params.a) || req.params.a === '0') && (parseInt(req.params.b) || req.params.b === '0')) {
+    res.status(200).json({ result: add(parseInt(req.params.a), parseInt(req.params.b)) });
+  } else {
+    res.status(400).json({ error: 'Parameters must be valid numbers.' })
+  }
+});
+
+
+
 module.exports = app;
