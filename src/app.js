@@ -95,4 +95,24 @@ app.post('/numbers/multiply', (req, res) => {
   }
 });
 
+app.post('/numbers/divide', (req, res) => {
+  const a = req.body.a;
+  const b = req.body.b;
+  const answer = divide(a, b);
+
+  if ((a === 0 || answer) && b !== 0) {
+    res.status(200).json({ result: answer });
+  } else {
+    let message;
+    if (b === 0) {
+      message = 'Unable to divide by 0.';
+    } else if (!a || !b) {
+      message = 'Parameters "a" and "b" are required.';
+    } else {
+      message = 'Parameters "a" and "b" must be valid numbers.';
+    }
+    res.status(400).json({ error: message });
+  }
+});
+
 module.exports = app;
