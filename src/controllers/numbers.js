@@ -6,10 +6,6 @@ const {
   remainder,
 } = require('../lib/numbers');
 
-// const isNumeric1 = (string) => {
-//   return /^\d+$/.test(string);
-// };
-
 const isNumeric = (string) => {
   return !Number.isNaN(parseInt(string));
 };
