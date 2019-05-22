@@ -25,7 +25,27 @@ describe('/objects', () => {
       });
   });
 
-  xit('errors if not all the parameters are given', (done) => {
-    
+  it('errors if age parameters is not given', (done) => {
+    chai.request(server)
+      .post('/objects/create-person')
+      .send({ name: 'Richard' })
+      .end((err, res) => {
+        expect(err).to.equal(null);
+        expect(res.status).to.equal(400);
+        expect(res.body).to.eql({ error: 'Name and age parameters required' });
+        done();
+      });
+  });
+
+  it('errors if name parameters is not given', (done) => {
+    chai.request(server)
+      .post('/objects/create-person')
+      .send({ age: 31 })
+      .end((err, res) => {
+        expect(err).to.equal(null);
+        expect(res.status).to.equal(400);
+        expect(res.body).to.eql({ error: 'Name and age parameters required' });
+        done();
+      });
   });
 });
